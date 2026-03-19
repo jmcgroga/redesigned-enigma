@@ -1,0 +1,106 @@
+/* Base typography */
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1em;
+  line-height: 1.6;
+  margin: 0;
+  padding: 1em 2em;
+  color: #1a1a1a;
+}
+
+h1 { font-size: 2em; margin-top: 0; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.2em; }
+
+/* Code blocks */
+pre {
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1em;
+  overflow-x: auto;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.85em;
+  line-height: 1.45;
+}
+
+code {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9em;
+  background: #f4f4f4;
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: 1em;
+}
+
+/* Syntax highlighting classes */
+.kw { color: #0000ff; font-weight: bold; }
+.st { color: #008000; }
+.cm { color: #808080; font-style: italic; }
+.nm { color: #800000; }
+.fn { color: #795e26; }
+.tp { color: #267f99; }
+.op { color: #666; }
+
+/* Diagrams */
+figure.diagram {
+  text-align: center;
+  margin: 2em 0;
+}
+
+figure.diagram figcaption {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 0.5em;
+  font-style: italic;
+}
+
+figure.diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Math */
+math[display="block"] {
+  display: block;
+  text-align: center;
+  margin: 1.5em 0;
+  overflow-x: auto;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+  font-size: 0.95em;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+th {
+  background: #f0f0f0;
+  font-weight: bold;
+}
+
+tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid #ccc;
+  margin-left: 0;
+  padding-left: 1.5em;
+  color: #555;
+  font-style: italic;
+}
