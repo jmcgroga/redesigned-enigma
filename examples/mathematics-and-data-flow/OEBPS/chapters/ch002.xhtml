@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:epub="http://www.idpf.org/2007/ops"
+      xml:lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Data Flow Architecture</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css"/>
+  </head>
+  <body>
+    <section epub:type="chapter">
+      <h1>Data Flow Architecture</h1>
+
+      <p>
+        This chapter illustrates how data moves through a processing pipeline
+        using flowcharts and sequence diagrams. Both are rendered as inline
+        SVG for crisp display on any screen size.
+      </p>
+
+      <h2>2.1 Data Processing Pipeline</h2>
+
+      <p>
+        The following flowchart describes the end-to-end pipeline for processing
+        incoming records: from ingestion through validation, transformation,
+        enrichment, and finally persistence.
+      </p>
+
+      <figure class="diagram">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="480" height="580" viewBox="0 0 480 580">
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="7"
+                    refX="10" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+            </marker>
+          </defs>
+
+          <!-- Start: Ingest -->
+          <ellipse cx="240" cy="40" rx="80" ry="24"
+                   fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+          <text x="240" y="45" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="13" fill="#155724">Ingest Data</text>
+
+          <!-- Arrow down -->
+          <line x1="240" y1="64" x2="240" y2="94"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- Validate -->
+          <rect x="148" y="95" width="184" height="44" rx="4"
+                fill="#cce5ff" stroke="#004085" stroke-width="1.5"/>
+          <text x="240" y="122" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="13" fill="#004085">Validate Schema</text>
+
+          <!-- Arrow down -->
+          <line x1="240" y1="139" x2="240" y2="169"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- Decision: Valid? -->
+          <polygon points="240,170 310,210 240,250 170,210"
+                   fill="#fff3cd" stroke="#856404" stroke-width="1.5"/>
+          <text x="240" y="214" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12" fill="#533f03">Valid?</text>
+
+          <!-- Yes arrow (down) -->
+          <line x1="240" y1="250" x2="240" y2="280"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <text x="252" y="270" font-family="Arial, sans-serif" font-size="11" fill="#28a745">Yes</text>
+
+          <!-- No arrow (right to error) -->
+          <line x1="310" y1="210" x2="390" y2="210"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <text x="345" y="204" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="11" fill="#dc3545">No</text>
+
+          <!-- Error box -->
+          <rect x="391" y="188" width="74" height="44" rx="4"
+                fill="#f8d7da" stroke="#721c24" stroke-width="1.5"/>
+          <text x="428" y="208" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="11" fill="#721c24">Log</text>
+          <text x="428" y="222" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="11" fill="#721c24">Error</text>
+
+          <!-- Transform -->
+          <rect x="148" y="281" width="184" height="44" rx="4"
+                fill="#cce5ff" stroke="#004085" stroke-width="1.5"/>
+          <text x="240" y="308" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="13" fill="#004085">Transform Fields</text>
+
+          <!-- Arrow down -->
+          <line x1="240" y1="325" x2="240" y2="355"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- Enrich -->
+          <rect x="148" y="356" width="184" height="44" rx="4"
+                fill="#cce5ff" stroke="#004085" stroke-width="1.5"/>
+          <text x="240" y="383" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="13" fill="#004085">Enrich with Metadata</text>
+
+          <!-- Arrow down -->
+          <line x1="240" y1="400" x2="240" y2="430"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- Persist -->
+          <rect x="148" y="431" width="184" height="44" rx="4"
+                fill="#cce5ff" stroke="#004085" stroke-width="1.5"/>
+          <text x="240" y="458" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="13" fill="#004085">Persist to Database</text>
+
+          <!-- Arrow down -->
+          <line x1="240" y1="475" x2="240" y2="505"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- End -->
+          <ellipse cx="240" cy="530" rx="80" ry="24"
+                   fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+          <text x="240" y="535" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="13" fill="#155724">Done</text>
+        </svg>
+        <figcaption>Figure 1: End-to-end data processing pipeline with validation branch</figcaption>
+      </figure>
+
+      <h2>2.2 Client–Server Sequence Diagram</h2>
+
+      <p>
+        The following sequence diagram shows how a client authenticates and then
+        fetches a protected resource from an API server, which in turn queries
+        a database.
+      </p>
+
+      <figure class="diagram">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="560" height="460" viewBox="0 0 560 460">
+          <defs>
+            <marker id="arrow2" markerWidth="10" markerHeight="7"
+                    refX="10" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+            </marker>
+            <marker id="arrow2r" markerWidth="10" markerHeight="7"
+                    refX="0" refY="3.5" orient="auto">
+              <polygon points="10 0, 0 3.5, 10 7" fill="#666"/>
+            </marker>
+          </defs>
+
+          <!-- Actor labels -->
+          <rect x="30" y="10" width="100" height="36" rx="4"
+                fill="#e8f4e8" stroke="#5a9a5a" stroke-width="1.5"/>
+          <text x="80" y="33" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="13" fill="#1a1a1a">Client</text>
+
+          <rect x="220" y="10" width="120" height="36" rx="4"
+                fill="#e8f0fa" stroke="#4a6fa5" stroke-width="1.5"/>
+          <text x="280" y="33" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="13" fill="#1a1a1a">API Server</text>
+
+          <rect x="420" y="10" width="110" height="36" rx="4"
+                fill="#fdf3e7" stroke="#c87941" stroke-width="1.5"/>
+          <text x="475" y="33" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="13" fill="#1a1a1a">Database</text>
+
+          <!-- Lifelines -->
+          <line x1="80" y1="46" x2="80" y2="450"
+                stroke="#aaa" stroke-dasharray="4,3" stroke-width="1"/>
+          <line x1="280" y1="46" x2="280" y2="450"
+                stroke="#aaa" stroke-dasharray="4,3" stroke-width="1"/>
+          <line x1="475" y1="46" x2="475" y2="450"
+                stroke="#aaa" stroke-dasharray="4,3" stroke-width="1"/>
+
+          <!-- 1: POST /auth -->
+          <line x1="80" y1="80" x2="270" y2="80"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <text x="175" y="73" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="11">POST /auth {credentials}</text>
+
+          <!-- 2: 200 OK + token -->
+          <line x1="280" y1="115" x2="90" y2="115"
+                stroke="#666" stroke-width="1.5" stroke-dasharray="5,3"
+                marker-end="url(#arrow2r)"/>
+          <text x="175" y="109" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="11" fill="#555">200 OK + JWT token</text>
+
+          <!-- 3: GET /resource -->
+          <line x1="80" y1="155" x2="270" y2="155"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <text x="175" y="148" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="11">GET /resource (Bearer token)</text>
+
+          <!-- 4: Verify token (internal note box) -->
+          <rect x="245" y="168" width="70" height="24" rx="2"
+                fill="#ffffcc" stroke="#cccc00" stroke-width="1"/>
+          <text x="280" y="184" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="10" fill="#555">Verify JWT</text>
+
+          <!-- 5: SELECT query -->
+          <line x1="280" y1="200" x2="465" y2="200"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow2)"/>
+          <text x="372" y="193" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="11">SELECT * FROM resources</text>
+
+          <!-- 6: Result rows -->
+          <line x1="475" y1="230" x2="290" y2="230"
+                stroke="#666" stroke-width="1.5" stroke-dasharray="5,3"
+                marker-end="url(#arrow2r)"/>
+          <text x="372" y="224" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="11" fill="#555">Result rows</text>
+
+          <!-- 7: Serialize to JSON (note) -->
+          <rect x="245" y="243" width="70" height="24" rx="2"
+                fill="#ffffcc" stroke="#cccc00" stroke-width="1"/>
+          <text x="280" y="259" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="10" fill="#555">Serialize JSON</text>
+
+          <!-- 8: 200 OK + JSON body -->
+          <line x1="280" y1="278" x2="90" y2="278"
+                stroke="#666" stroke-width="1.5" stroke-dasharray="5,3"
+                marker-end="url(#arrow2r)"/>
+          <text x="175" y="272" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="11" fill="#555">200 OK + JSON body</text>
+
+          <!-- Step labels -->
+          <text x="10" y="84" font-family="Arial, sans-serif" font-size="10" fill="#999">①</text>
+          <text x="10" y="119" font-family="Arial, sans-serif" font-size="10" fill="#999">②</text>
+          <text x="10" y="159" font-family="Arial, sans-serif" font-size="10" fill="#999">③</text>
+          <text x="10" y="204" font-family="Arial, sans-serif" font-size="10" fill="#999">④</text>
+          <text x="10" y="234" font-family="Arial, sans-serif" font-size="10" fill="#999">⑤</text>
+          <text x="10" y="282" font-family="Arial, sans-serif" font-size="10" fill="#999">⑥</text>
+        </svg>
+        <figcaption>Figure 2: Authentication and resource retrieval sequence across Client, API Server, and Database</figcaption>
+      </figure>
+
+      <h2>2.3 System Component Diagram</h2>
+
+      <p>
+        The architecture of the system consists of three tiers: a frontend
+        layer, a service layer, and a persistence layer. The components
+        communicate over well-defined interfaces.
+      </p>
+
+      <figure class="diagram">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="500" height="320" viewBox="0 0 500 320">
+          <defs>
+            <marker id="arrow3" markerWidth="10" markerHeight="7"
+                    refX="10" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+            </marker>
+          </defs>
+
+          <!-- Frontend tier label -->
+          <rect x="10" y="10" width="480" height="80" rx="6"
+                fill="#eef6ee" stroke="#5a9a5a" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <text x="20" y="28" font-family="Arial, sans-serif" font-size="11" fill="#5a9a5a" font-weight="bold">Frontend Layer</text>
+          <rect x="30" y="34" width="100" height="44" rx="4"
+                fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+          <text x="80" y="61" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12">Web App</text>
+          <rect x="150" y="34" width="100" height="44" rx="4"
+                fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+          <text x="200" y="61" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12">Mobile App</text>
+          <rect x="270" y="34" width="100" height="44" rx="4"
+                fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+          <text x="320" y="61" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12">CLI Tool</text>
+
+          <!-- Arrows from frontend to service -->
+          <line x1="80" y1="110" x2="200" y2="148"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <line x1="200" y1="110" x2="220" y2="148"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <line x1="320" y1="110" x2="240" y2="148"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+
+          <!-- Service tier -->
+          <rect x="10" y="118" width="480" height="80" rx="6"
+                fill="#eef0fa" stroke="#4a6fa5" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <text x="20" y="136" font-family="Arial, sans-serif" font-size="11" fill="#4a6fa5" font-weight="bold">Service Layer</text>
+          <rect x="60" y="142" width="120" height="44" rx="4"
+                fill="#d0e4ff" stroke="#4a6fa5" stroke-width="1.5"/>
+          <text x="120" y="169" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12">Auth Service</text>
+          <rect x="200" y="142" width="120" height="44" rx="4"
+                fill="#d0e4ff" stroke="#4a6fa5" stroke-width="1.5"/>
+          <text x="260" y="169" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12">Data Service</text>
+          <rect x="340" y="142" width="120" height="44" rx="4"
+                fill="#d0e4ff" stroke="#4a6fa5" stroke-width="1.5"/>
+          <text x="400" y="169" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12">Notification Svc</text>
+
+          <!-- Arrows from service to persistence -->
+          <line x1="120" y1="218" x2="160" y2="258"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <line x1="260" y1="218" x2="240" y2="258"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+          <line x1="400" y1="218" x2="330" y2="258"
+                stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+
+          <!-- Persistence tier -->
+          <rect x="10" y="228" width="480" height="80" rx="6"
+                fill="#fdf3e7" stroke="#c87941" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <text x="20" y="246" font-family="Arial, sans-serif" font-size="11" fill="#c87941" font-weight="bold">Persistence Layer</text>
+          <rect x="40" y="252" width="120" height="44" rx="4"
+                fill="#ffe8cc" stroke="#c87941" stroke-width="1.5"/>
+          <text x="100" y="279" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12">PostgreSQL</text>
+          <rect x="180" y="252" width="120" height="44" rx="4"
+                fill="#ffe8cc" stroke="#c87941" stroke-width="1.5"/>
+          <text x="240" y="279" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12">Redis Cache</text>
+          <rect x="320" y="252" width="120" height="44" rx="4"
+                fill="#ffe8cc" stroke="#c87941" stroke-width="1.5"/>
+          <text x="380" y="279" text-anchor="middle"
+                font-family="Arial, sans-serif" font-size="12">Object Store</text>
+        </svg>
+        <figcaption>Figure 3: Three-tier system architecture — Frontend, Service, and Persistence layers</figcaption>
+      </figure>
+
+    </section>
+  </body>
+</html>
