@@ -1,6 +1,6 @@
 ---
 name: pdf-export-eink
-description: Export document content as a PDF optimized for E Ink reading devices. Supports the Supernotes Nomad (7.8-inch, 1404×1872, 300 PPI) with diagrams (inline SVG), mathematical equations (MathML), code blocks with syntax highlighting, tables, and lists. In Claude Desktop (no bash): generates one self-contained HTML that the user opens in their browser and prints to PDF — no intermediate files are shown. In Claude Code (bash available): generates chapter files, a MathJax preprocessor, and a packaging script that assembles and converts everything to PDF via WeasyPrint or headless Chromium. Use when the user wants to read a document, article, or technical reference on an E Ink tablet.
+description: "Export document content as a PDF optimized for E Ink reading devices. Supports the Supernotes Nomad (7.8-inch, 1404x1872, 300 PPI) with diagrams (inline SVG), mathematical equations (MathML), code blocks with syntax highlighting, tables, and lists. In Claude Desktop (no bash): generates one self-contained HTML that the user opens in their browser and prints to PDF - no intermediate files are shown. In Claude Code (bash available): generates chapter files, a MathJax preprocessor, and a packaging script that assembles and converts everything to PDF via WeasyPrint or headless Chromium. Use when the user wants to read a document, article, or technical reference on an E Ink tablet."
 ---
 
 # E Ink PDF Export
