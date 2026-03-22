@@ -1,6 +1,6 @@
 ---
 name: pdf-export-eink
-description: Export document content as a PDF optimized for E Ink reading devices. Supports the Supernotes Nomad (7.8-inch, 1404×1872, 300 PPI) with diagrams (inline SVG), mathematical equations (MathML), code blocks with syntax highlighting, tables, and lists. Creates one HTML file per chapter (like the epub-export skill) plus a packaging script that assembles and converts them to PDF via WeasyPrint or headless Chromium. Use when the user wants to read a document, article, or technical reference on an E Ink tablet.
+description: Export document content as a PDF optimized for E Ink reading devices. Supports the Supernotes Nomad (7.8-inch, 1404×1872, 300 PPI) with diagrams (inline SVG), mathematical equations (MathML), code blocks with syntax highlighting, tables, and lists. Creates one HTML file per chapter (like the epub-export skill) plus a Node.js MathJax preprocessor and a Python packaging script that assembles, pre-renders equations to SVG, and converts to PDF via WeasyPrint or headless Chromium. Use when the user wants to read a document, article, or technical reference on an E Ink tablet.
 ---
 
 # E Ink PDF Export
@@ -335,7 +335,7 @@ Example wrapper:
 
 ### 4d. Mathematical Equations (MathML)
 
-Chromium 109+ and WeasyPrint 60+ both support MathML Core natively. Use `xmlns="http://www.w3.org/1998/Math/MathML"`.
+Write equations as MathML in the chapter HTML files. The packaging script (Step 6) pre-renders every `<math>` element to SVG using MathJax before WeasyPrint sees the file — WeasyPrint renders SVG correctly but treats MathML as plain text. Use `xmlns="http://www.w3.org/1998/Math/MathML"`.
 
 - **Inline** (within a sentence): `<math xmlns="http://www.w3.org/1998/Math/MathML">…</math>`
 - **Block** (displayed on its own line): `<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">…</math>`
@@ -402,32 +402,123 @@ Example — block equation for `E = mc^2`:
 - Ordered: `<ol><li>item</li></ol>`
 - Nested: place a child `<ul>` or `<ol>` directly inside a `<li>`
 
-## Step 5: Write the Packaging Script
+## Step 5: Write the MathJax Preprocessor
 
-Write `{slug}-package.py`. Replace `{slug}` with the actual slug value. List every chapter file in reading order inside `CHAPTERS`.
+Write `mathml-to-svg.js` in the same directory as the packaging script. This file is shared across all documents — write it once per project, not once per document. It converts every `<math>` element in the assembled HTML to an SVG using MathJax, producing a file that WeasyPrint can render correctly.
+
+**Prerequisite** (run once): `npm install mathjax-full`
+
+```javascript
+#!/usr/bin/env node
+'use strict';
+/**
+ * mathml-to-svg.js
+ *
+ * Pre-render every <math> element in an HTML file to SVG using MathJax.
+ * WeasyPrint renders SVG correctly but treats MathML as plain text.
+ *
+ * Usage:
+ *   npm install mathjax-full   # once
+ *   node mathml-to-svg.js <input.html> <output.html>
+ */
+
+const { mathjax }             = require('mathjax-full/js/mathjax.js');
+const { MathML }              = require('mathjax-full/js/input/mathml.js');
+const { SVG }                 = require('mathjax-full/js/output/svg.js');
+const { liteAdaptor }         = require('mathjax-full/js/adaptors/liteAdaptor.js');
+const { RegisterHTMLHandler } = require('mathjax-full/js/handlers/html.js');
+const fs = require('fs');
+
+const adaptor = liteAdaptor();
+RegisterHTMLHandler(adaptor);
+
+const doc = mathjax.document('', {
+  InputJax: new MathML(),
+  OutputJax: new SVG({ fontCache: 'none' }),
+});
+
+/**
+ * Convert a MathML string to an HTML snippet containing an SVG.
+ * Block math → <div class="math-block">
+ * Inline math → <span class="math-inline" style="vertical-align:…">
+ */
+function mathmlToSvg(mathml, display) {
+  const node = doc.convert(mathml, { display });
+  const raw  = adaptor.outerHTML(node);
+
+  if (display) {
+    return raw
+      .replace(/^<mjx-container[^>]*>/, '<div class="math-block">')
+      .replace(/<\/mjx-container>$/, '</div>');
+  }
+
+  // Preserve the vertical-align inline style MathJax sets on the container
+  const vaMatch = raw.match(/style="([^"]*)"/);
+  const va = vaMatch ? ` style="${vaMatch[1]}"` : '';
+  return raw
+    .replace(/^<mjx-container[^>]*>/, `<span class="math-inline"${va}>`)
+    .replace(/<\/mjx-container>$/, '</span>');
+}
+
+const [,, inputFile, outputFile] = process.argv;
+if (!inputFile || !outputFile) {
+  console.error('Usage: node mathml-to-svg.js <input.html> <output.html>');
+  process.exit(1);
+}
+
+let html = fs.readFileSync(inputFile, 'utf8');
+
+// Replace every <math …>…</math> block in one pass.
+let count = 0;
+html = html.replace(/<math[\s\S]*?<\/math>/gi, (match) => {
+  const display = /display\s*=\s*["']block["']/i.test(match);
+  count++;
+  return mathmlToSvg(match, display);
+});
+
+// Inject CSS for the generated elements before the closing </style>.
+const css = `
+    /* ── MathJax SVG output ── */
+    .math-inline { display: inline-block; line-height: 0; }
+    .math-inline svg { overflow: visible; }
+    .math-block  { display: block; text-align: center; margin: 1em 0; line-height: 1; }
+    .math-block svg { display: block; margin: 0 auto; overflow: visible; }`;
+
+html = html.replace('</style>', css + '\n  </style>');
+
+fs.writeFileSync(outputFile, html, 'utf8');
+console.log(`Converted ${count} equation(s):  ${inputFile} → ${outputFile}`);
+```
+
+## Step 6: Write the Packaging Script
+
+Write `{slug}-package.py`. Replace `{slug}` with the actual slug value. List every chapter file in reading order inside `SOURCES`.
 
 ```python
 #!/usr/bin/env python3
 """
-Assemble {slug} chapter files into a single HTML document and convert to PDF.
+Assemble {slug} chapter files into a single HTML document, pre-render
+MathML equations to SVG, then convert to PDF.
 
 Usage:
     pip install weasyprint      # first time only
+    npm install mathjax-full    # first time only
     python3 {slug}-package.py
 
 Or for headless Chromium instead of WeasyPrint:
     python3 {slug}-package.py --chrome
 
 Run from the directory containing the '{slug}/' folder.
-Requires Python 3.6+.
+Requires Python 3.6+ and Node.js.
 """
 import os
 import re
+import subprocess
 import sys
 
-SLUG = "{slug}"
+SLUG  = "{slug}"
 TITLE = "{Title}"
-LANG = "{lang}"
+LANG  = "{lang}"
 
 # List every source file in reading order (relative to the {slug}/ directory)
 SOURCES = [
@@ -449,19 +540,17 @@ def extract_body(path: str) -> str:
 
 def main() -> None:
     use_chrome = "--chrome" in sys.argv
+    here = os.path.dirname(os.path.abspath(__file__))
 
-    # Read shared stylesheet
+    # ── Step 1: Assemble combined HTML ───────────────────────────────────────
     css_path = os.path.join(SLUG, "styles", "main.css")
     with open(css_path, encoding="utf-8") as f:
         css = f.read()
 
-    # Collect body content from every source file
     body_parts: list[str] = []
     for source in SOURCES:
-        path = os.path.join(SLUG, source)
-        body_parts.append(extract_body(path))
+        body_parts.append(extract_body(os.path.join(SLUG, source)))
 
-    # Assemble combined HTML
     body_content = "".join(part + "\n\n" for part in body_parts)
     combined_html = f"""<!DOCTYPE html>
 <html lang="{LANG}">
@@ -482,10 +571,28 @@ def main() -> None:
         f.write(combined_html)
     print(f"Assembled → {combined_path}")
 
+    # ── Step 2: Pre-render MathML → SVG with MathJax ─────────────────────────
+    # WeasyPrint treats MathML as plain text; SVG renders correctly.
+    mathsvg_path = os.path.join(SLUG, "combined-mathsvg.html")
+    mathjs = os.path.join(here, "mathml-to-svg.js")
+    try:
+        result = subprocess.run(
+            ["node", mathjs, combined_path, mathsvg_path],
+            check=True, capture_output=True, text=True,
+        )
+        print(f"Math SVG  → {mathsvg_path}  ({result.stdout.strip()})")
+        render_path = mathsvg_path
+    except FileNotFoundError:
+        print("Warning: node not found — MathML will not render correctly.", file=sys.stderr)
+        render_path = combined_path
+    except subprocess.CalledProcessError as e:
+        print(f"Warning: mathml-to-svg.js failed: {e.stderr.strip()}", file=sys.stderr)
+        render_path = combined_path
+
+    # ── Step 3: Convert to PDF ────────────────────────────────────────────────
     out_pdf = f"{SLUG}.pdf"
 
     if use_chrome:
-        import subprocess
         for binary in ("chromium", "chromium-browser", "google-chrome", "google-chrome-stable"):
             try:
                 subprocess.run(
@@ -494,26 +601,23 @@ def main() -> None:
                      "--no-pdf-header-footer",
                      "--run-all-compositor-stages-before-draw",
                      "--virtual-time-budget=5000",
-                     combined_path],
+                     render_path],
                     check=True,
                 )
                 print(f"Created  → {out_pdf}  (via {binary})")
                 return
             except (FileNotFoundError, subprocess.CalledProcessError):
                 continue
-        print("No Chromium binary found. Try: chromium --headless …", file=sys.stderr)
+        print("No Chromium binary found on PATH.", file=sys.stderr)
         sys.exit(1)
     else:
         try:
             from weasyprint import HTML  # type: ignore
-            HTML(combined_path).write_pdf(out_pdf)
+            HTML(render_path).write_pdf(out_pdf)
             print(f"Created  → {out_pdf}  (via WeasyPrint)")
         except ImportError:
             print("WeasyPrint is not installed.", file=sys.stderr)
             print("  pip install weasyprint", file=sys.stderr)
-            print(f"  python3 {SLUG}-package.py", file=sys.stderr)
-            print("Or use Chrome:", file=sys.stderr)
-            print(f"  python3 {SLUG}-package.py --chrome", file=sys.stderr)
             sys.exit(1)
 
 
@@ -521,12 +625,13 @@ if __name__ == "__main__":
     main()
 ```
 
-## Step 6: Run the Packaging Script
+## Step 7: Run the Packaging Script
 
 ### If Bash is available (Desktop)
 
 ```bash
-pip install weasyprint
+npm install mathjax-full   # once — needed for math rendering
+pip install weasyprint     # once — needed for PDF conversion
 python3 {slug}-package.py
 ```
 
@@ -538,9 +643,15 @@ ls -lh {slug}.pdf
 
 ### If Bash is not available (Web or Mobile)
 
-Tell the user: "Run `pip install weasyprint && python3 {slug}-package.py` from the directory containing the `{slug}/` folder to produce `{slug}.pdf`. Pass `--chrome` to use headless Chromium instead of WeasyPrint."
+Tell the user: "Run the following from the directory containing the `{slug}/` folder:
+```
+npm install mathjax-full
+pip install weasyprint
+python3 {slug}-package.py
+```
+Pass `--chrome` to use headless Chromium instead of WeasyPrint."
 
-## Step 7: Final Summary
+## Step 8: Final Summary
 
 Report back to the user with:
 
