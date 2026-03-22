@@ -1,13 +1,14 @@
 ---
 name: pdf-export-eink
-description: Export document content as a PDF optimized for E Ink reading devices. Supports the Supernotes Nomad (7.8-inch, 1404×1872, 300 PPI) with diagrams (inline SVG), mathematical equations (MathML), code blocks with syntax highlighting, tables, and lists. Creates one HTML file per chapter (like the epub-export skill) plus a Node.js MathJax preprocessor and a Python packaging script that assembles, pre-renders equations to SVG, and converts to PDF via WeasyPrint or headless Chromium. Use when the user wants to read a document, article, or technical reference on an E Ink tablet.
+description: Export document content as a PDF optimized for E Ink reading devices. Supports the Supernotes Nomad (7.8-inch, 1404×1872, 300 PPI) with diagrams (inline SVG), mathematical equations (MathML), code blocks with syntax highlighting, tables, and lists. In Claude Desktop (no bash): generates one self-contained HTML that the user opens in their browser and prints to PDF — no intermediate files are shown. In Claude Code (bash available): generates chapter files, a MathJax preprocessor, and a packaging script that assembles and converts everything to PDF via WeasyPrint or headless Chromium. Use when the user wants to read a document, article, or technical reference on an E Ink tablet.
 ---
 
 # E Ink PDF Export
 
-This skill creates a set of HTML chapter files sized and typeset for a specific E Ink device, then packages them into a PDF via a Python script. The multi-file structure mirrors the epub-export skill: each chapter is written as a separate file, keeping every Write operation to a manageable size.
+**There are two rendering paths. Choose the correct one at Step 1 before writing anything.**
 
-Follow every step in order. Do not skip steps.
+- **Path A — Claude Desktop / no bash**: Generate a single self-contained HTML artifact. The user opens it in Chrome or Edge and prints to PDF. No intermediate files.
+- **Path B — Claude Code / bash available**: Generate chapter HTML files, a MathJax preprocessor, and a Python packaging script. Run the script to produce the PDF directly.
 
 ## Device Profiles
 
@@ -17,7 +18,7 @@ Follow every step in order. Do not skip steps.
 
 Additional devices can be added to this table in future versions.
 
-## Step 1: Gather Document Information
+## Step 1: Gather Document Information and Choose Path
 
 Ask the user for all of the following before writing any files. Collect everything in a single message:
 
@@ -34,7 +35,167 @@ Ask the user for all of the following before writing any files. Collect everythi
   - Tables (column headers and row data)
   - Ordered and unordered lists
 
-Derive a **document slug** from the title: lowercase, spaces replaced with hyphens, non-alphanumeric characters removed. Example: "Field Guide to Algorithms" → `field-guide-to-algorithms`. All output files go under a directory named with this slug.
+Derive a **document slug** from the title: lowercase, spaces replaced with hyphens, non-alphanumeric characters removed. Example: "Field Guide to Algorithms" → `field-guide-to-algorithms`.
+
+**Then determine which path to follow:**
+
+- **Bash available** (the `Bash` tool works, you are in Claude Code): follow **Path B** (Steps 2–8).
+- **No bash** (Claude Desktop, claude.ai, or any context without shell access): follow **Path A** (Step 2A only). Do not write any other files.
+
+---
+
+## PATH A — Claude Desktop / No Bash
+
+### Step 2A: Generate the Single-File HTML
+
+Write **one file only**: `{slug}.html`. Embed the CSS and all chapter content directly. Use MathJax CDN so equations render in the browser before printing. Do not write any CSS files, chapter files, or scripts.
+
+The file structure:
+
+```html
+<!DOCTYPE html>
+<html lang="{lang}">
+<head>
+  <meta charset="UTF-8"/>
+  <title>{Title}</title>
+  <style>
+    /* ── Page geometry: Supernotes Nomad ── */
+    @page { size: 4.68in 6.24in; margin: 0.40in 0.45in; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+      font-size: 11pt; line-height: 1.5; color: #000; background: #fff;
+      margin: 0; padding: 0;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+
+    h1 { font-size: 18pt; margin: 0 0 0.6em; line-height: 1.2; }
+    h2 { font-size: 14pt; margin: 1.2em 0 0.4em; line-height: 1.3; }
+    h3 { font-size: 12pt; margin: 1em 0 0.3em; line-height: 1.3; }
+    h1, h2, h3 { page-break-after: avoid; }
+
+    article { page-break-after: always; }
+    article:last-child { page-break-after: avoid; }
+
+    p { margin: 0 0 0.6em; orphans: 3; widows: 3; }
+
+    pre {
+      background: #f4f4f4; border: 1pt solid #bbb; border-radius: 3pt;
+      padding: 0.55em 0.7em;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 8.5pt; line-height: 1.4;
+      white-space: pre-wrap; word-break: break-all; page-break-inside: avoid;
+    }
+    code {
+      font-family: "Courier New", Courier, monospace; font-size: 9pt;
+      background: #f4f4f4; padding: 0.05em 0.25em; border-radius: 2pt;
+    }
+    pre code { background: none; padding: 0; font-size: 1em; }
+
+    .kw { font-weight: bold; }
+    .st { font-style: italic; }
+    .cm { color: #555; font-style: italic; }
+    .nm { font-weight: bold; }
+    .fn { text-decoration: underline; }
+    .tp { font-variant: small-caps; }
+
+    figure.diagram { text-align: center; margin: 1.2em 0; page-break-inside: avoid; }
+    figure.diagram figcaption { font-size: 9pt; color: #333; margin-top: 0.4em; font-style: italic; }
+    figure.diagram svg { max-width: 100%; height: auto; }
+
+    table {
+      border-collapse: collapse; width: 100%; margin: 1em 0;
+      font-size: 10pt; page-break-inside: avoid;
+    }
+    th, td { border: 1pt solid #888; padding: 0.35em 0.5em; text-align: left; }
+    th { background: #e0e0e0; font-weight: bold; }
+    tr:nth-child(even) td { background: #f6f6f6; }
+
+    ul, ol { margin: 0.4em 0 0.4em 1.4em; padding: 0; }
+    li { margin-bottom: 0.2em; }
+
+    blockquote {
+      border-left: 3pt solid #888; margin: 0.8em 0;
+      padding-left: 1em; color: #333; font-style: italic;
+    }
+
+    .title-page { text-align: center; padding-top: 1.8in; }
+    .title-page h1 { font-size: 22pt; margin-bottom: 0.5em; }
+    .title-page .author { font-size: 13pt; font-style: italic; margin: 0.3em 0; }
+    .title-page .date { font-size: 10pt; color: #555; margin-top: 1em; }
+
+    /* ── Print-to-PDF notice (hidden when printing) ── */
+    @media screen {
+      #print-notice {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+        background: #1a1a1a; color: #fff; padding: 10px 20px;
+        font: bold 13px/1.4 sans-serif; text-align: center;
+      }
+    }
+    @media print { #print-notice { display: none; } }
+  </style>
+  <!--
+    MathJax renders MathML equations as SVG in the browser.
+    Wait for the notice below to disappear before printing.
+  -->
+  <script>
+    MathJax = {
+      startup: {
+        typeset: true,
+        ready() {
+          MathJax.startup.defaultReady();
+          MathJax.startup.promise.then(() => {
+            const n = document.getElementById('print-notice');
+            if (n) n.textContent =
+              'Equations loaded. Print: Ctrl+P → Save as PDF'
+              + ' · Paper: Custom 4.68 × 6.24 in · Margins: None';
+          });
+        }
+      }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/mml-svg.js"></script>
+</head>
+<body>
+  <div id="print-notice">Loading equations — please wait before printing…</div>
+
+  <!-- Title page -->
+  <article class="title-page">
+    <h1>{Title}</h1>
+    <p class="author">{Author}</p>
+    <p class="date">{Date}</p>
+  </article>
+
+  <!-- Chapter 1 -->
+  <article>
+    <h1>{Chapter 1 Title}</h1>
+    <!-- chapter content here -->
+  </article>
+
+  <!-- add more <article> elements for each chapter -->
+</body>
+</html>
+```
+
+**Content rules** — same as Path B (see sections 4a–4f below for reference). Assemble all chapters directly inside this one file.
+
+**After writing the file**, tell the user:
+
+> I've created `{slug}.html`. To convert it to PDF:
+> 1. Open the file in **Chrome** or **Edge**
+> 2. Wait for the black bar at the top to say "Equations loaded"
+> 3. Press **Ctrl+P** (or ⌘P on Mac) → **Save as PDF**
+> 4. In More settings: Paper size → **Custom** → **4.68 × 6.24 inches**, Margins → **None**
+> 5. Save as `{slug}.pdf`
+
+That is the complete output for Path A. Do not write any other files.
+
+---
+
+## PATH B — Claude Code / Bash Available
 
 ## Step 2: Create the Directory Structure
 
@@ -641,23 +802,12 @@ Verify:
 ls -lh {slug}.pdf
 ```
 
-### If Bash is not available (Web or Mobile)
-
-Tell the user: "Run the following from the directory containing the `{slug}/` folder:
-```
-npm install mathjax-full
-pip install weasyprint
-python3 {slug}-package.py
-```
-Pass `--chrome` to use headless Chromium instead of WeasyPrint."
-
 ## Step 8: Final Summary
 
 Report back to the user with:
 
-1. **File tree** of everything written, in a code block with tree-style formatting.
-2. **Output**: `{slug}.pdf` created (or the packaging command to run).
-3. **Special content table**:
+1. **Output**: `{slug}.pdf` created (Path B) or print-to-PDF instructions (Path A).
+2. **Special content table**:
 
    | Type | Count / Details |
    |---|---|
@@ -666,27 +816,45 @@ Report back to the user with:
    | Code blocks | list languages used |
    | Tables | N tables |
 
-4. **Caveats**: flag any SVG that uses approximate geometry and should be reviewed, and any MathML conversion that was uncertain.
+3. **Caveats**: flag any SVG that uses approximate geometry and should be reviewed, and any MathML conversion that was uncertain.
 
-5. **Transfer tip**: Copy the PDF to the device via USB, the Supernotes desktop app, or any cloud sync service. On the Nomad, open it with the built-in PDF reader or KOReader for best text-reflow support.
+4. **Transfer tip**: Copy the PDF to the device via USB, the Supernotes desktop app, or any cloud sync service. On the Nomad, open it with the built-in PDF reader or KOReader for best text-reflow support.
 
 ---
 
 ## E Ink PDF Validity Checklist
 
-Before declaring the task complete, verify each item mentally:
+Before declaring the task complete, verify each item mentally.
+
+### Path A (single-file HTML)
+
+- [ ] Only one file written: `{slug}.html`
+- [ ] `@page { size: 4.68in 6.24in; margin: 0.40in 0.45in; }` is embedded in `<style>`
+- [ ] `font-size` on `body` is `11pt`
+- [ ] `-webkit-print-color-adjust: exact` and `print-color-adjust: exact` are set
+- [ ] MathJax CDN `<script>` is present; the `ready()` callback updates `#print-notice`
+- [ ] All content (title page + all chapters) is assembled inside the single file
+- [ ] All MathML elements have `xmlns="http://www.w3.org/1998/Math/MathML"`
+- [ ] All inline SVG has `xmlns="http://www.w3.org/2000/svg"` and `width="100%"` with `viewBox`
+- [ ] SVG strokes `≥ 1.5`; greyscale fills only; all text `fill="#000"`
+- [ ] Code blocks use typographic contrast (bold/italic/underline), not colour alone
+- [ ] Special HTML characters in code are escaped: `&lt;` `&gt;` `&amp;`
+- [ ] User instructions provided (open in Chrome/Edge, wait, Ctrl+P, custom paper size)
+
+### Path B (multi-file + packaging script)
 
 - [ ] `styles/main.css` has `@page { size: 4.68in 6.24in; margin: 0.40in 0.45in; }`
-- [ ] `font-size` on `body` is `11pt` (not px, not em)
+- [ ] `font-size` on `body` is `11pt`
 - [ ] `-webkit-print-color-adjust: exact` and `print-color-adjust: exact` are both set on `body`
 - [ ] Every `<article>` except the last has `page-break-after: always` (via CSS rule)
-- [ ] No external resources in any chapter file (no remote `<link>`, `src`, or `url()`)
-- [ ] Stylesheet path in title and chapter files matches their depth: `href="styles/main.css"` (title) and `href="../styles/main.css"` (chapters)
+- [ ] No external resources in chapter files (no remote `<link>`, `src`, or `url()`)
+- [ ] Stylesheet path: `href="styles/main.css"` (title), `href="../styles/main.css"` (chapters)
 - [ ] All inline SVG elements have `xmlns="http://www.w3.org/2000/svg"`
-- [ ] All `<svg>` elements use `width="100%"` with a `viewBox` (not fixed pixel widths)
-- [ ] SVG strokes are `≥ 1.5` wide; fills use only black, grey, or hatch patterns; all text is `fill="#000"`
+- [ ] All `<svg>` elements use `width="100%"` with a `viewBox`
+- [ ] SVG strokes `≥ 1.5`; greyscale fills only; all text `fill="#000"`
 - [ ] All MathML elements have `xmlns="http://www.w3.org/1998/Math/MathML"`
 - [ ] Code blocks use typographic contrast (bold/italic/underline), not colour alone
 - [ ] Special HTML characters in code are escaped: `&lt;` `&gt;` `&amp;`
 - [ ] `page-break-inside: avoid` is set on `pre`, `figure.diagram`, and `table`
-- [ ] The `SOURCES` list in the packaging script matches the files written, in order
+- [ ] `mathml-to-svg.js` written alongside the packaging script
+- [ ] `SOURCES` list in the packaging script matches the files written, in order
