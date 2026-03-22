@@ -1,0 +1,144 @@
+/* ── Page geometry: Supernotes Nomad (7.8 in, 300 PPI, 1404 × 1872 px) ── */
+@page {
+  size: 4.68in 6.24in;
+  margin: 0.40in 0.45in;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ── Base typography ── */
+body {
+  font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #000;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Headings ── */
+h1 { font-size: 18pt; margin: 0 0 0.6em; line-height: 1.2; }
+h2 { font-size: 14pt; margin: 1.2em 0 0.4em; line-height: 1.3; }
+h3 { font-size: 12pt; margin: 1em 0 0.3em; line-height: 1.3; }
+h1, h2, h3 { page-break-after: avoid; }
+
+/* ── Sections / page breaks ── */
+article { page-break-after: always; }
+article:last-child { page-break-after: avoid; }
+
+/* ── Paragraphs ── */
+p {
+  margin: 0 0 0.6em;
+  orphans: 3;
+  widows: 3;
+}
+
+/* ── Code blocks ── */
+pre {
+  background: #f4f4f4;
+  border: 1pt solid #bbb;
+  border-radius: 3pt;
+  padding: 0.55em 0.7em;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 8.5pt;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-all;
+  page-break-inside: avoid;
+}
+
+code {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 9pt;
+  background: #f4f4f4;
+  padding: 0.05em 0.25em;
+  border-radius: 2pt;
+}
+
+pre code { background: none; padding: 0; font-size: 1em; }
+
+/* ── Syntax highlighting — typographic contrast, not colour ──
+   E Ink screens render in greyscale; colour-only cues are invisible.
+   Use bold, italic, underline, and small-caps instead.             */
+.kw { font-weight: bold; }                    /* keyword     */
+.st { font-style: italic; }                   /* string      */
+.cm { color: #555; font-style: italic; }      /* comment     */
+.nm { font-weight: bold; }                    /* number      */
+.fn { text-decoration: underline; }           /* function    */
+.tp { font-variant: small-caps; }             /* type        */
+.op { }                                       /* operator    */
+
+/* ── Diagrams ── */
+figure.diagram {
+  text-align: center;
+  margin: 1.2em 0;
+  page-break-inside: avoid;
+}
+
+figure.diagram figcaption {
+  font-size: 9pt;
+  color: #333;
+  margin-top: 0.4em;
+  font-style: italic;
+}
+
+figure.diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Math ── */
+math[display="block"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+/* ── Tables ── */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+
+th, td {
+  border: 1pt solid #888;
+  padding: 0.35em 0.5em;
+  text-align: left;
+}
+
+th {
+  background: #e0e0e0;
+  font-weight: bold;
+}
+
+tr:nth-child(even) td { background: #f6f6f6; }
+
+/* ── Lists ── */
+ul, ol { margin: 0.4em 0 0.4em 1.4em; padding: 0; }
+li { margin-bottom: 0.2em; }
+
+/* ── Blockquotes ── */
+blockquote {
+  border-left: 3pt solid #888;
+  margin: 0.8em 0;
+  padding-left: 1em;
+  color: #333;
+  font-style: italic;
+}
+
+/* ── Title page ── */
+.title-page {
+  text-align: center;
+  padding-top: 1.8in;
+}
+
+.title-page h1 { font-size: 22pt; margin-bottom: 0.5em; }
+.title-page .author { font-size: 13pt; font-style: italic; margin: 0.3em 0; }
+.title-page .date { font-size: 10pt; color: #555; margin-top: 1em; }

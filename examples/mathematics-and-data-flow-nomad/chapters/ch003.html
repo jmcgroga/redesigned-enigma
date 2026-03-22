@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Algorithms and Complexity</title>
+  <link rel="stylesheet" type="text/css" href="../styles/main.css"/>
+</head>
+<body>
+  <article>
+    <h1>Algorithms and Complexity</h1>
+
+    <p>
+      This chapter surveys fundamental algorithms — binary search, merge sort,
+      and dynamic programming — and summarises their time and space complexities.
+    </p>
+
+    <h2>3.1 Binary Search</h2>
+
+    <p>
+      Binary search finds a target value in a sorted array in
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>O</mi><mo>(</mo><mo>log</mo><mi>n</mi><mo>)</mo>
+      </math>
+      time by repeatedly halving the search interval.
+    </p>
+
+<pre><code class="language-python"><span class="kw">def</span> <span class="fn">binary_search</span>(arr: <span class="tp">list</span>, target: <span class="tp">int</span>) -&gt; <span class="tp">int</span>:
+    <span class="st">"""Return index of target in sorted arr, or -1 if not found."""</span>
+    low, high = <span class="nm">0</span>, <span class="fn">len</span>(arr) - <span class="nm">1</span>
+
+    <span class="kw">while</span> low &lt;= high:
+        mid = (low + high) // <span class="nm">2</span>
+        <span class="kw">if</span> arr[mid] == target:
+            <span class="kw">return</span> mid
+        <span class="kw">elif</span> arr[mid] &lt; target:
+            low = mid + <span class="nm">1</span>
+        <span class="kw">else</span>:
+            high = mid - <span class="nm">1</span>
+
+    <span class="kw">return</span> -<span class="nm">1</span>
+</code></pre>
+
+    <h2>3.2 Merge Sort</h2>
+
+    <p>
+      Merge sort is a divide-and-conquer algorithm with guaranteed
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo>
+      </math>
+      time complexity. It splits the array in half, recursively sorts each half,
+      then merges the two sorted halves.
+    </p>
+
+<pre><code class="language-python"><span class="kw">def</span> <span class="fn">merge_sort</span>(arr: <span class="tp">list</span>) -&gt; <span class="tp">list</span>:
+    <span class="kw">if</span> <span class="fn">len</span>(arr) &lt;= <span class="nm">1</span>:
+        <span class="kw">return</span> arr
+
+    mid = <span class="fn">len</span>(arr) // <span class="nm">2</span>
+    left  = <span class="fn">merge_sort</span>(arr[:mid])
+    right = <span class="fn">merge_sort</span>(arr[mid:])
+    <span class="kw">return</span> <span class="fn">_merge</span>(left, right)
+
+
+<span class="kw">def</span> <span class="fn">_merge</span>(left: <span class="tp">list</span>, right: <span class="tp">list</span>) -&gt; <span class="tp">list</span>:
+    result = []
+    i = j = <span class="nm">0</span>
+    <span class="kw">while</span> i &lt; <span class="fn">len</span>(left) <span class="kw">and</span> j &lt; <span class="fn">len</span>(right):
+        <span class="kw">if</span> left[i] &lt;= right[j]:
+            result.<span class="fn">append</span>(left[i]); i += <span class="nm">1</span>
+        <span class="kw">else</span>:
+            result.<span class="fn">append</span>(right[j]); j += <span class="nm">1</span>
+    result.<span class="fn">extend</span>(left[i:])
+    result.<span class="fn">extend</span>(right[j:])
+    <span class="kw">return</span> result
+</code></pre>
+
+    <h2>3.3 Dynamic Programming — Longest Common Subsequence</h2>
+
+    <p>
+      The Longest Common Subsequence (LCS) problem finds the longest
+      subsequence common to two sequences. The recurrence is:
+    </p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>L</mi><mo>[</mo><mi>i</mi><mo>]</mo><mo>[</mo><mi>j</mi><mo>]</mo>
+      <mo>=</mo>
+      <mrow>
+        <mo>{</mo>
+        <mtable>
+          <mtr>
+            <mtd><mi>L</mi><mo>[</mo><mi>i</mi><mo>&#x2212;</mo><mn>1</mn><mo>]</mo><mo>[</mo><mi>j</mi><mo>&#x2212;</mo><mn>1</mn><mo>]</mo><mo>+</mo><mn>1</mn></mtd>
+            <mtd><mtext>if&#x2009;</mtext><msub><mi>X</mi><mi>i</mi></msub><mo>=</mo><msub><mi>Y</mi><mi>j</mi></msub></mtd>
+          </mtr>
+          <mtr>
+            <mtd><mo>max</mo><mo>(</mo><mi>L</mi><mo>[</mo><mi>i</mi><mo>&#x2212;</mo><mn>1</mn><mo>]</mo><mo>[</mo><mi>j</mi><mo>]</mo><mo>,</mo><mi>L</mi><mo>[</mo><mi>i</mi><mo>]</mo><mo>[</mo><mi>j</mi><mo>&#x2212;</mo><mn>1</mn><mo>]</mo><mo>)</mo></mtd>
+            <mtd><mtext>otherwise</mtext></mtd>
+          </mtr>
+        </mtable>
+      </mrow>
+    </math>
+
+<pre><code class="language-python"><span class="kw">def</span> <span class="fn">lcs_length</span>(X: <span class="tp">str</span>, Y: <span class="tp">str</span>) -&gt; <span class="tp">int</span>:
+    m, n = <span class="fn">len</span>(X), <span class="fn">len</span>(Y)
+    <span class="cm"># Build (m+1) x (n+1) table, initialised to zero</span>
+    dp = [[<span class="nm">0</span>] * (n + <span class="nm">1</span>) <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(m + <span class="nm">1</span>)]
+
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>, m + <span class="nm">1</span>):
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>, n + <span class="nm">1</span>):
+            <span class="kw">if</span> X[i - <span class="nm">1</span>] == Y[j - <span class="nm">1</span>]:
+                dp[i][j] = dp[i - <span class="nm">1</span>][j - <span class="nm">1</span>] + <span class="nm">1</span>
+            <span class="kw">else</span>:
+                dp[i][j] = <span class="fn">max</span>(dp[i - <span class="nm">1</span>][j], dp[i][j - <span class="nm">1</span>])
+
+    <span class="kw">return</span> dp[m][n]
+</code></pre>
+
+    <h2>3.4 Complexity Comparison</h2>
+
+    <p>
+      The table below summarises worst-case time and space complexities for the
+      algorithms covered in this chapter, as well as several others for reference.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Algorithm</th>
+          <th>Best Case</th>
+          <th>Average Case</th>
+          <th>Worst Case</th>
+          <th>Space</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Binary Search</td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></math></td>
+        </tr>
+        <tr>
+          <td>Bubble Sort</td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></math></td>
+        </tr>
+        <tr>
+          <td>Merge Sort</td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></math></td>
+        </tr>
+        <tr>
+          <td>Quick Sort</td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
+        </tr>
+        <tr>
+          <td>LCS (DP)</td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>m</mi><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>m</mi><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>m</mi><mi>n</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>m</mi><mi>n</mi><mo>)</mo></math></td>
+        </tr>
+        <tr>
+          <td>Dijkstra (heap)</td>
+          <td>—</td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>(</mo><mi>V</mi><mo>+</mo><mi>E</mi><mo>)</mo><mo>log</mo><mi>V</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>(</mo><mi>V</mi><mo>+</mo><mi>E</mi><mo>)</mo><mo>log</mo><mi>V</mi><mo>)</mo></math></td>
+          <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>V</mi><mo>)</mo></math></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>3.5 Fibonacci — Naive vs. Memoised</h2>
+
+    <p>
+      The naive recursive Fibonacci has exponential complexity
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>O</mi><mo>(</mo><msup><mn>2</mn><mi>n</mi></msup><mo>)</mo>
+      </math>
+      because it recomputes subproblems. Memoisation reduces this to
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo>
+      </math>.
+    </p>
+
+<pre><code class="language-python"><span class="kw">from</span> functools <span class="kw">import</span> lru_cache
+
+<span class="cm"># Naive — O(2^n)</span>
+<span class="kw">def</span> <span class="fn">fib_naive</span>(n: <span class="tp">int</span>) -&gt; <span class="tp">int</span>:
+    <span class="kw">if</span> n &lt;= <span class="nm">1</span>:
+        <span class="kw">return</span> n
+    <span class="kw">return</span> <span class="fn">fib_naive</span>(n - <span class="nm">1</span>) + <span class="fn">fib_naive</span>(n - <span class="nm">2</span>)
+
+<span class="cm"># Memoised — O(n) time, O(n) space</span>
+@<span class="fn">lru_cache</span>(maxsize=<span class="kw">None</span>)
+<span class="kw">def</span> <span class="fn">fib_memo</span>(n: <span class="tp">int</span>) -&gt; <span class="tp">int</span>:
+    <span class="kw">if</span> n &lt;= <span class="nm">1</span>:
+        <span class="kw">return</span> n
+    <span class="kw">return</span> <span class="fn">fib_memo</span>(n - <span class="nm">1</span>) + <span class="fn">fib_memo</span>(n - <span class="nm">2</span>)
+
+<span class="cm"># Bottom-up DP — O(n) time, O(1) space</span>
+<span class="kw">def</span> <span class="fn">fib_dp</span>(n: <span class="tp">int</span>) -&gt; <span class="tp">int</span>:
+    <span class="kw">if</span> n &lt;= <span class="nm">1</span>:
+        <span class="kw">return</span> n
+    a, b = <span class="nm">0</span>, <span class="nm">1</span>
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">2</span>, n + <span class="nm">1</span>):
+        a, b = b, a + b
+    <span class="kw">return</span> b
+</code></pre>
+
+    <p>
+      The closed-form expression (Binet's formula) gives the
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math>-th
+      Fibonacci number directly:
+    </p>
+
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <msub><mi>F</mi><mi>n</mi></msub>
+      <mo>=</mo>
+      <mfrac>
+        <mrow>
+          <msup>
+            <mrow>
+              <mo>(</mo>
+              <mfrac>
+                <mrow><mn>1</mn><mo>+</mo><msqrt><mn>5</mn></msqrt></mrow>
+                <mn>2</mn>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+            <mi>n</mi>
+          </msup>
+          <mo>&#x2212;</mo>
+          <msup>
+            <mrow>
+              <mo>(</mo>
+              <mfrac>
+                <mrow><mn>1</mn><mo>&#x2212;</mo><msqrt><mn>5</mn></msqrt></mrow>
+                <mn>2</mn>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+            <mi>n</mi>
+          </msup>
+        </mrow>
+        <msqrt><mn>5</mn></msqrt>
+      </mfrac>
+    </math>
+
+  </article>
+</body>
+</html>
