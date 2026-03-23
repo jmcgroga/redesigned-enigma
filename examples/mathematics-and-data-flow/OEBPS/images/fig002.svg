@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="560" height="460" viewBox="0 0 560 460">
+  <defs>
+    <marker id="arrow2" markerWidth="10" markerHeight="7"
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+    <marker id="arrow2r" markerWidth="10" markerHeight="7"
+            refX="0" refY="3.5" orient="auto">
+      <polygon points="10 0, 0 3.5, 10 7" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- Actor labels -->
+  <rect x="30" y="10" width="100" height="36" rx="4"
+        fill="#e8f4e8" stroke="#5a9a5a" stroke-width="1.5"/>
+  <text x="80" y="33" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="13" fill="#1a1a1a">Client</text>
+
+  <rect x="220" y="10" width="120" height="36" rx="4"
+        fill="#e8f0fa" stroke="#4a6fa5" stroke-width="1.5"/>
+  <text x="280" y="33" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="13" fill="#1a1a1a">API Server</text>
+
+  <rect x="420" y="10" width="110" height="36" rx="4"
+        fill="#fdf3e7" stroke="#c87941" stroke-width="1.5"/>
+  <text x="475" y="33" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="13" fill="#1a1a1a">Database</text>
+
+  <!-- Lifelines -->
+  <line x1="80" y1="46" x2="80" y2="450"
+        stroke="#aaa" stroke-dasharray="4,3" stroke-width="1"/>
+  <line x1="280" y1="46" x2="280" y2="450"
+        stroke="#aaa" stroke-dasharray="4,3" stroke-width="1"/>
+  <line x1="475" y1="46" x2="475" y2="450"
+        stroke="#aaa" stroke-dasharray="4,3" stroke-width="1"/>
+
+  <!-- 1: POST /auth -->
+  <line x1="80" y1="80" x2="270" y2="80"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <text x="175" y="73" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="11">POST /auth {credentials}</text>
+
+  <!-- 2: 200 OK + token -->
+  <line x1="280" y1="115" x2="90" y2="115"
+        stroke="#666" stroke-width="1.5" stroke-dasharray="5,3"
+        marker-end="url(#arrow2r)"/>
+  <text x="175" y="109" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="11" fill="#555">200 OK + JWT token</text>
+
+  <!-- 3: GET /resource -->
+  <line x1="80" y1="155" x2="270" y2="155"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <text x="175" y="148" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="11">GET /resource (Bearer token)</text>
+
+  <!-- 4: Verify token -->
+  <rect x="245" y="168" width="70" height="24" rx="2"
+        fill="#ffffcc" stroke="#cccc00" stroke-width="1"/>
+  <text x="280" y="184" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="10" fill="#555">Verify JWT</text>
+
+  <!-- 5: SELECT query -->
+  <line x1="280" y1="200" x2="465" y2="200"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <text x="372" y="193" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="11">SELECT * FROM resources</text>
+
+  <!-- 6: Result rows -->
+  <line x1="475" y1="230" x2="290" y2="230"
+        stroke="#666" stroke-width="1.5" stroke-dasharray="5,3"
+        marker-end="url(#arrow2r)"/>
+  <text x="372" y="224" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="11" fill="#555">Result rows</text>
+
+  <!-- 7: Serialize to JSON -->
+  <rect x="245" y="243" width="70" height="24" rx="2"
+        fill="#ffffcc" stroke="#cccc00" stroke-width="1"/>
+  <text x="280" y="259" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="10" fill="#555">Serialize JSON</text>
+
+  <!-- 8: 200 OK + JSON body -->
+  <line x1="280" y1="278" x2="90" y2="278"
+        stroke="#666" stroke-width="1.5" stroke-dasharray="5,3"
+        marker-end="url(#arrow2r)"/>
+  <text x="175" y="272" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="11" fill="#555">200 OK + JSON body</text>
+
+  <!-- Step labels -->
+  <text x="10" y="84" font-family="Arial, sans-serif" font-size="10" fill="#999">&#x2460;</text>
+  <text x="10" y="119" font-family="Arial, sans-serif" font-size="10" fill="#999">&#x2461;</text>
+  <text x="10" y="159" font-family="Arial, sans-serif" font-size="10" fill="#999">&#x2462;</text>
+  <text x="10" y="204" font-family="Arial, sans-serif" font-size="10" fill="#999">&#x2463;</text>
+  <text x="10" y="234" font-family="Arial, sans-serif" font-size="10" fill="#999">&#x2464;</text>
+  <text x="10" y="282" font-family="Arial, sans-serif" font-size="10" fill="#999">&#x2465;</text>
+</svg>

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:epub="http://www.idpf.org/2007/ops"
-      xml:lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
-    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
     <title>Algorithms and Complexity</title>
     <link rel="stylesheet" type="text/css" href="../styles/main.css"/>
   </head>
   <body>
-    <section epub:type="chapter">
+    <div class="chapter">
       <h1>Algorithms and Complexity</h1>
 
       <p>
@@ -112,7 +111,7 @@
             <span class="kw">if</span> X[i - <span class="nm">1</span>] == Y[j - <span class="nm">1</span>]:
                 dp[i][j] = dp[i - <span class="nm">1</span>][j - <span class="nm">1</span>] + <span class="nm">1</span>
             <span class="kw">else</span>:
-                dp[i][j] = <span class="fn">max</span>(dp[i - <span class="nm">1</span>][j], dp[i][j - <span class="nm">1</span>])
+                dp[i][j] = <span class="fn">max</span>(dp[i - <span class="nm;">1</span>][j], dp[i][j - <span class="nm">1</span>])
 
     <span class="kw">return</span> dp[m][n]
 </code></pre>
@@ -124,61 +123,10 @@
         algorithms covered in this chapter, as well as several others for reference.
       </p>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Algorithm</th>
-            <th>Best Case</th>
-            <th>Average Case</th>
-            <th>Worst Case</th>
-            <th>Space</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Binary Search</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></math></td>
-          </tr>
-          <tr>
-            <td>Bubble Sort</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></math></td>
-          </tr>
-          <tr>
-            <td>Merge Sort</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></math></td>
-          </tr>
-          <tr>
-            <td>Quick Sort</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>n</mi><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>log</mo><mi>n</mi><mo>)</mo></math></td>
-          </tr>
-          <tr>
-            <td>LCS (DP)</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>m</mi><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>m</mi><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>m</mi><mi>n</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>m</mi><mi>n</mi><mo>)</mo></math></td>
-          </tr>
-          <tr>
-            <td>Dijkstra (heap)</td>
-            <td>—</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>(</mo><mi>V</mi><mo>+</mo><mi>E</mi><mo>)</mo><mo>log</mo><mi>V</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mo>(</mo><mi>V</mi><mo>+</mo><mi>E</mi><mo>)</mo><mo>log</mo><mi>V</mi><mo>)</mo></math></td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>O</mi><mo>(</mo><mi>V</mi><mo>)</mo></math></td>
-          </tr>
-        </tbody>
-      </table>
+      <figure class="table-image">
+        <img src="../images/tbl001.svg" alt="Table: Algorithm complexity comparison"/>
+        <figcaption>Table 1: Worst-case time and space complexities</figcaption>
+      </figure>
 
       <h2>3.5 Fibonacci — Naive vs. Memoised</h2>
 
@@ -257,6 +205,6 @@
         </mfrac>
       </math>
 
-    </section>
+    </div>
   </body>
 </html>
