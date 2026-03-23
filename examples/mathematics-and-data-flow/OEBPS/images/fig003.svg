@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="500" height="320" viewBox="0 0 500 320">
+  <defs>
+    <marker id="arrow3" markerWidth="10" markerHeight="7"
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- Frontend tier -->
+  <rect x="10" y="10" width="480" height="80" rx="6"
+        fill="#eef6ee" stroke="#5a9a5a" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="20" y="28" font-family="Arial, sans-serif" font-size="11" fill="#5a9a5a" font-weight="bold">Frontend Layer</text>
+  <rect x="30" y="34" width="100" height="44" rx="4"
+        fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="80" y="61" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12">Web App</text>
+  <rect x="150" y="34" width="100" height="44" rx="4"
+        fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="200" y="61" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12">Mobile App</text>
+  <rect x="270" y="34" width="100" height="44" rx="4"
+        fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="320" y="61" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12">CLI Tool</text>
+
+  <!-- Arrows frontend → service -->
+  <line x1="80" y1="110" x2="200" y2="148"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+  <line x1="200" y1="110" x2="220" y2="148"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+  <line x1="320" y1="110" x2="240" y2="148"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+
+  <!-- Service tier -->
+  <rect x="10" y="118" width="480" height="80" rx="6"
+        fill="#eef0fa" stroke="#4a6fa5" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="20" y="136" font-family="Arial, sans-serif" font-size="11" fill="#4a6fa5" font-weight="bold">Service Layer</text>
+  <rect x="60" y="142" width="120" height="44" rx="4"
+        fill="#d0e4ff" stroke="#4a6fa5" stroke-width="1.5"/>
+  <text x="120" y="169" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12">Auth Service</text>
+  <rect x="200" y="142" width="120" height="44" rx="4"
+        fill="#d0e4ff" stroke="#4a6fa5" stroke-width="1.5"/>
+  <text x="260" y="169" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12">Data Service</text>
+  <rect x="340" y="142" width="120" height="44" rx="4"
+        fill="#d0e4ff" stroke="#4a6fa5" stroke-width="1.5"/>
+  <text x="400" y="169" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12">Notification Svc</text>
+
+  <!-- Arrows service → persistence -->
+  <line x1="120" y1="218" x2="160" y2="258"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+  <line x1="260" y1="218" x2="240" y2="258"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+  <line x1="400" y1="218" x2="330" y2="258"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow3)"/>
+
+  <!-- Persistence tier -->
+  <rect x="10" y="228" width="480" height="80" rx="6"
+        fill="#fdf3e7" stroke="#c87941" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="20" y="246" font-family="Arial, sans-serif" font-size="11" fill="#c87941" font-weight="bold">Persistence Layer</text>
+  <rect x="40" y="252" width="120" height="44" rx="4"
+        fill="#ffe8cc" stroke="#c87941" stroke-width="1.5"/>
+  <text x="100" y="279" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12">PostgreSQL</text>
+  <rect x="180" y="252" width="120" height="44" rx="4"
+        fill="#ffe8cc" stroke="#c87941" stroke-width="1.5"/>
+  <text x="240" y="279" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12">Redis Cache</text>
+  <rect x="320" y="252" width="120" height="44" rx="4"
+        fill="#ffe8cc" stroke="#c87941" stroke-width="1.5"/>
+  <text x="380" y="279" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12">Object Store</text>
+</svg>

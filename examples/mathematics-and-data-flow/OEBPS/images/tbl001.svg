@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="480" height="228" viewBox="0 0 480 228">
+  <!-- Column widths: 120, 72, 96, 96, 96 (total 480) -->
+  <!-- Header row (y=0, h=32) -->
+  <rect x="0"   y="0" width="120" height="32" fill="#f0f0f0" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="120" y="0" width="72"  height="32" fill="#f0f0f0" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="192" y="0" width="96"  height="32" fill="#f0f0f0" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="288" y="0" width="96"  height="32" fill="#f0f0f0" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="384" y="0" width="96"  height="32" fill="#f0f0f0" stroke="#ccc" stroke-width="0.5"/>
+  <text x="60"  y="21" text-anchor="middle" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#1a1a1a">Algorithm</text>
+  <text x="156" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#1a1a1a">Best</text>
+  <text x="240" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#1a1a1a">Average</text>
+  <text x="336" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#1a1a1a">Worst</text>
+  <text x="432" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#1a1a1a">Space</text>
+
+  <!-- Row 1: Binary Search (y=32, h=28) white -->
+  <rect x="0"   y="32" width="120" height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="120" y="32" width="72"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="192" y="32" width="96"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="288" y="32" width="96"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="384" y="32" width="96"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <text x="60"  y="51" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">Binary Search</text>
+  <text x="156" y="51" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(1)</text>
+  <text x="240" y="51" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(log n)</text>
+  <text x="336" y="51" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(log n)</text>
+  <text x="432" y="51" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(1)</text>
+
+  <!-- Row 2: Bubble Sort (y=60, h=28) gray -->
+  <rect x="0"   y="60" width="120" height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="120" y="60" width="72"  height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="192" y="60" width="96"  height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="288" y="60" width="96"  height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="384" y="60" width="96"  height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <text x="60"  y="79" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">Bubble Sort</text>
+  <text x="156" y="79" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n)</text>
+  <text x="240" y="79" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n&#xB2;)</text>
+  <text x="336" y="79" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n&#xB2;)</text>
+  <text x="432" y="79" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(1)</text>
+
+  <!-- Row 3: Merge Sort (y=88, h=28) white -->
+  <rect x="0"   y="88" width="120" height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="120" y="88" width="72"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="192" y="88" width="96"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="288" y="88" width="96"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="384" y="88" width="96"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <text x="60"  y="107" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">Merge Sort</text>
+  <text x="156" y="107" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n log n)</text>
+  <text x="240" y="107" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n log n)</text>
+  <text x="336" y="107" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n log n)</text>
+  <text x="432" y="107" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n)</text>
+
+  <!-- Row 4: Quick Sort (y=116, h=28) gray -->
+  <rect x="0"   y="116" width="120" height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="120" y="116" width="72"  height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="192" y="116" width="96"  height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="288" y="116" width="96"  height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="384" y="116" width="96"  height="28" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <text x="60"  y="135" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">Quick Sort</text>
+  <text x="156" y="135" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n log n)</text>
+  <text x="240" y="135" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n log n)</text>
+  <text x="336" y="135" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(n&#xB2;)</text>
+  <text x="432" y="135" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(log n)</text>
+
+  <!-- Row 5: LCS DP (y=144, h=28) white -->
+  <rect x="0"   y="144" width="120" height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="120" y="144" width="72"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="192" y="144" width="96"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="288" y="144" width="96"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="384" y="144" width="96"  height="28" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+  <text x="60"  y="163" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">LCS (DP)</text>
+  <text x="156" y="163" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(mn)</text>
+  <text x="240" y="163" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(mn)</text>
+  <text x="336" y="163" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(mn)</text>
+  <text x="432" y="163" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(mn)</text>
+
+  <!-- Row 6: Dijkstra (y=172, h=56 — two-line cell) gray -->
+  <rect x="0"   y="172" width="120" height="56" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="120" y="172" width="72"  height="56" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="192" y="172" width="96"  height="56" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="288" y="172" width="96"  height="56" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <rect x="384" y="172" width="96"  height="56" fill="#fafafa" stroke="#ccc" stroke-width="0.5"/>
+  <text x="60"  y="191" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">Dijkstra</text>
+  <text x="60"  y="207" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">(heap)</text>
+  <text x="156" y="203" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">—</text>
+  <text x="240" y="191" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#1a1a1a">O((V+E)</text>
+  <text x="240" y="207" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#1a1a1a">log V)</text>
+  <text x="336" y="191" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#1a1a1a">O((V+E)</text>
+  <text x="336" y="207" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#1a1a1a">log V)</text>
+  <text x="432" y="203" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1a1a1a">O(V)</text>
+</svg>

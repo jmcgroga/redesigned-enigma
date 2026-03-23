@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="480" height="580" viewBox="0 0 480 580">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7"
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- Start: Ingest -->
+  <ellipse cx="240" cy="40" rx="80" ry="24"
+           fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="240" y="45" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="13" fill="#155724">Ingest Data</text>
+
+  <line x1="240" y1="64" x2="240" y2="94"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Validate -->
+  <rect x="148" y="95" width="184" height="44" rx="4"
+        fill="#cce5ff" stroke="#004085" stroke-width="1.5"/>
+  <text x="240" y="122" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="13" fill="#004085">Validate Schema</text>
+
+  <line x1="240" y1="139" x2="240" y2="169"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Decision: Valid? -->
+  <polygon points="240,170 310,210 240,250 170,210"
+           fill="#fff3cd" stroke="#856404" stroke-width="1.5"/>
+  <text x="240" y="214" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="12" fill="#533f03">Valid?</text>
+
+  <!-- Yes arrow (down) -->
+  <line x1="240" y1="250" x2="240" y2="280"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="252" y="270" font-family="Arial, sans-serif" font-size="11" fill="#28a745">Yes</text>
+
+  <!-- No arrow (right to error) -->
+  <line x1="310" y1="210" x2="390" y2="210"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="345" y="204" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="11" fill="#dc3545">No</text>
+
+  <!-- Error box -->
+  <rect x="391" y="188" width="74" height="44" rx="4"
+        fill="#f8d7da" stroke="#721c24" stroke-width="1.5"/>
+  <text x="428" y="208" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="11" fill="#721c24">Log</text>
+  <text x="428" y="222" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="11" fill="#721c24">Error</text>
+
+  <!-- Transform -->
+  <rect x="148" y="281" width="184" height="44" rx="4"
+        fill="#cce5ff" stroke="#004085" stroke-width="1.5"/>
+  <text x="240" y="308" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="13" fill="#004085">Transform Fields</text>
+
+  <line x1="240" y1="325" x2="240" y2="355"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Enrich -->
+  <rect x="148" y="356" width="184" height="44" rx="4"
+        fill="#cce5ff" stroke="#004085" stroke-width="1.5"/>
+  <text x="240" y="383" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="13" fill="#004085">Enrich with Metadata</text>
+
+  <line x1="240" y1="400" x2="240" y2="430"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Persist -->
+  <rect x="148" y="431" width="184" height="44" rx="4"
+        fill="#cce5ff" stroke="#004085" stroke-width="1.5"/>
+  <text x="240" y="458" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="13" fill="#004085">Persist to Database</text>
+
+  <line x1="240" y1="475" x2="240" y2="505"
+        stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- End -->
+  <ellipse cx="240" cy="530" rx="80" ry="24"
+           fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="240" y="535" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="13" fill="#155724">Done</text>
+</svg>
